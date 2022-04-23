@@ -21,7 +21,35 @@ classdef MPC
             X0 = sdpvar(nx,1,'full');
 
             % YOUR CODE HERE
+            A = params.model.A;
+            B = params.model.B;
+
+            H_x = params.constraints.StateMatrix;
+            h_x = params.constraints.StateRHS;
+            H_u = params.constraints.InputMatrix;
+            h_u = params.constraints.InputRHS;
             
+            X = sdpvar(repmat(nx,1,N+1),ones(1,N+1),'full');
+
+            objective = 0;
+            constraints = X{1} == X0;
+            for k = 1:N
+                constraints = [ ...
+                    constraints, ...
+                    X{k+1} == A*X{k} + B*U{k} , ...
+                    H_x * X{k} <= h_x, ...
+                    H_u * U{k} <= h_u ...
+                ];
+
+                objective = objective + X{k}'*Q*X{k} + U{k}'*R*U{k};
+            end
+
+            %Terminal Cost
+            [~,P,~] = dlqr(A, B, Q, R);
+            J_Nt = X{N+1}' * P * X{N+1};
+            objective = objective + J_Nt;
+
+
             opts = sdpsettings('verbose',1,'solver','quadprog');
             obj.yalmip_optimizer = optimizer(constraints,objective,opts,X0,{U{1} objective});
         end

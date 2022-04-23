@@ -14,6 +14,49 @@ classdef MPC_TS_SC
     methods
         function obj = MPC_TS_SC(Q,R,N,H,h,S,v,params)            
             % YOUR CODE HERE
+            A = params.model.A;
+            B = params.model.B;
+
+            nu = params.model.nu;
+            nx = params.model.nx;
+
+            H_x = params.constraints.StateMatrix;
+            h_x = params.constraints.StateRHS;
+            H_u = params.constraints.InputMatrix;
+            h_u = params.constraints.InputRHS;
+
+            % define optimization variables
+            U = sdpvar(repmat(nu,1,N),ones(1,N),'full');
+            X0 = sdpvar(nx,1,'full');
+            X = sdpvar(repmat(nx,1,N+1),ones(1,N+1),'full');
+            e = sdpvar(repmat(nx,1,N+1),ones(1,N+1),'full');
+
+            objective = 0;
+            constraints = X{1} == X0;
+            for k = 1:N
+                constraints = [ ...
+                    constraints, ...
+                    X{k+1} == A*X{k} + B*U{k} , ...
+                    H_x * X{k} <= h_x + e{k}, ...
+                    H_u * U{k} <= h_u, ...
+                    e{k} >= zeros(nx,1) ... 
+                ];
+
+                objective = objective + X{k}'*Q*X{k} + U{k}'*R*U{k} + e{k}'*S*e{k} + v*max(abs(e{k})) ;
+            end
+            % terminal constraint
+            constraints = [ ...
+                constraints, ...
+                H * X{N+1} <= h
+            ];
+
+            %Terminal cost
+            [~,P,~] = dlqr(A, B, Q, R);
+            J_Nt = X{N+1}' * P * X{N+1};
+            objective = objective + J_Nt + e{N+1}'*S*e{N+1} + v*max(abs(e{N+1}));
+
+
+
             opts = sdpsettings('verbose',1,'solver','quadprog');
             obj.yalmip_optimizer = optimizer(constraints,objective,opts,X0,{U{1} objective});
         end

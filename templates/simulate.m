@@ -18,9 +18,10 @@ function [Xt,Ut,u_info] = simulate(x0, ctrl, params)
     Ut = zeros(size(ctrl.K,1),Nt);
 
     for k = 2:Nt+1
+%         [Ut(:,k-1), u_info(k-1)] = ctrl.eval(Xt(:,k-1));
         Ut(:,k-1) = ctrl.K * Xt(:,k-1);
         Xt(:,k) = A*Xt(:,k-1) + B*Ut(:,k-1);
     end
-    u_info.ctrl_feas(1:Nt,1:Nt) = true;
-    
+    u_info.ctrl_feas(1:Nt) = true;
+% p = 2;
 end

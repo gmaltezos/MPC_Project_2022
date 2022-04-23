@@ -8,4 +8,9 @@
 
 function J_Nt = traj_cost(Xt,Ut,Q,R)
     % YOUR CODE HERE
+    J_Nt = 0;
+    for i = 1: size(Ut,2)
+        J_Nt = J_Nt + Xt(:,i)' * Q * Xt(:,i) + Ut(:,i)' * R * Ut(:,i);
+    end
+    
 end
