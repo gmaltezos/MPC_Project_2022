@@ -19,10 +19,10 @@ function [H, h] = lqr_maxPI(Q,R,params)
     A = params.model.A;
     B = params.model.B;
     [F,~,~] = dlqr(A, B, Q, R);
-    K = -F;
+    K = F;
 
     % computes a control invariant set for LTI system x^+ = A*x+B*u
-    system = LTISystem('A', A + B*K);
+    system = LTISystem('A', A - B*K);
     
     % The constraints should not be hardcoded, because in every test
     % scenario, they provide a different system.

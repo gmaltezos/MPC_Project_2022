@@ -51,6 +51,7 @@ classdef MPC
 
 
             opts = sdpsettings('verbose',1,'solver','quadprog');
+            % TODO Why is the argument for u the way it is?
             obj.yalmip_optimizer = optimizer(constraints,objective,opts,X0,{U{1} objective});
         end
 

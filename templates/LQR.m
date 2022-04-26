@@ -16,12 +16,12 @@ classdef LQR
         function obj = LQR(Q,R,params)
             % YOUR CODE HERE
             [F,~,~] = dlqr(params.model.A, params.model.B,Q,R);
-            obj.K = -F; %(save feedback matrix for use in eval function)
+            obj.K = F; %(save feedback matrix for use in eval function)
         end
-        
+        % TODO Should it be called ctrl_info?
         function [u, u_info] = eval(obj,x)
             % YOUR CODE HERE
-            u = obj.K * x;
+            u = - obj.K * x;
             u_info = struct('ctrl_feas',true);
         end
     end

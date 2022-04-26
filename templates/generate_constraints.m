@@ -13,6 +13,8 @@ function [H_u, h_u, H_x, h_x] = generate_constraints(params)
     h_u = [umax; umax; umax; umax; umax; umax];
     smax = params.constraints.MaxAbsPositionXZ;
     ymax = params.constraints.MaxAbsPositionY;
+    % TODO: Replace hardcoded matrices
     H_x = [1 0 0 0 0 0; -1 0 0 0 0 0; 0 1 0 0 0 0; 0 -1 0 0 0 0; 0 0 1 0 0 0; 0 0 -1 0 0 0];
+    % TODO Constraint matrices must be scaled
     h_x = [smax; smax; ymax; ymax; smax; smax];
 end

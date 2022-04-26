@@ -7,6 +7,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [A, B] = generate_system(Ac, Bc, params)
+    % TODO Matrices must not be hardcoded
     C = [0 0 0 0 0 0];
     D = [0 0 0];
     Ts = 600;

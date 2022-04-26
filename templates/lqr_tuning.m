@@ -11,7 +11,7 @@ function [tuning_struct, i_opt] = lqr_tuning(x0,Q,params)
 %     stoppp = 1;
 
     for i = 1:size(Q,2)
-        R = eye(3); %% Hardcoded - PROBLEMATIC
+        R = eye(3); %% TODO Hardcoded - PROBLEMATIC
         obj = LQR(diag(Q(:,i)),R,params);
         [x,u,~] = simulate(x0, obj, params);
         [s_max, y_max, u_max, J_u, df_max, vf_max, traj_feas] = traj_constraints(x,u,params);
