@@ -36,16 +36,16 @@ function [H, h] = lqr_maxPI(Q,R,params)
     xMax = [];
     uMin = [];
     uMax = [];
-    for i =1:2:2*nx
+    for i =1:2:size(h_x,1)
         xMin = [xMin; -h_x(i+1)];
         xMax = [xMax; h_x(i)];
     end
-    for j=1:2:2*nu
+    for j=1:2:size(h_u,1)
         uMin = [uMin; -h_u(j+1)];
         uMax = [uMax; h_u(j)];
     end
-    system.x.min = xMin;
-    system.x.max = xMax;
+    system.x.min = [xMin; zeros(nx-size(xMin,1),1)];
+    system.x.max = [xMax; zeros(nx-size(xMax,1),1)];
     %system.u.min = uMin;
     %system.u.max = uMax;
     %controller.model.x.with(’terminalSet’)
@@ -60,9 +60,9 @@ function [H, h] = lqr_maxPI(Q,R,params)
     %%controller.model.x.with(’setConstraint’)
     %controller.model.x.setConstraint = X
     InvSet = system.invariantSet();
-    InvSet.plot()
+%     InvSet.plot()
     H = InvSet.A;
     h = InvSet.b;
-    stopp3 = 1;
+%     stopp3 = 1;
 end
 

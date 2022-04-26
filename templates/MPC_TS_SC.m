@@ -29,7 +29,7 @@ classdef MPC_TS_SC
             U = sdpvar(repmat(nu,1,N),ones(1,N),'full');
             X0 = sdpvar(nx,1,'full');
             X = sdpvar(repmat(nx,1,N+1),ones(1,N+1),'full');
-            e = sdpvar(repmat(nx,1,N+1),ones(1,N+1),'full');
+            e = sdpvar(repmat(size(h_x,1),1,N+1),ones(1,N+1),'full');
 
             objective = 0;
             constraints = X{1} == X0;
@@ -39,7 +39,7 @@ classdef MPC_TS_SC
                     X{k+1} == A*X{k} + B*U{k} , ...
                     H_x * X{k} <= h_x + e{k}, ...
                     H_u * U{k} <= h_u, ...
-                    e{k} >= zeros(nx,1) ... 
+                    e{k} >= zeros(size(h_x,1),1) ... 
                 ];
 
                 objective = objective + X{k}'*Q*X{k} + U{k}'*R*U{k} + e{k}'*S*e{k} + v*max(abs(e{k})) ;
