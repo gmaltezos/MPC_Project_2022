@@ -46,8 +46,19 @@ function [H, h] = lqr_maxPI(Q,R,params)
     end
     system.x.min = xMin;
     system.x.max = xMax;
-    system.u.min = uMin;
-    system.u.max = uMax;
+    %system.u.min = uMin;
+    %system.u.max = uMax;
+    %controller.model.x.with(’terminalSet’)
+    %controller.model.x.terminalSet = T
+    %P1 = Polyhedron('lb', uMin, 'ub', uMax);
+    % TODO: Shouldn't the terminal set be part of the construction of the
+    % invariant set too?
+    A = [-K; K];
+    b = [uMax; uMax];
+    P = Polyhedron (A, b);
+    system.setDomain('x', P);
+    %%controller.model.x.with(’setConstraint’)
+    %controller.model.x.setConstraint = X
     InvSet = system.invariantSet();
     InvSet.plot()
     H = InvSet.A;
