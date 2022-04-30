@@ -59,6 +59,7 @@ classdef MPC_TS_SC
 
             opts = sdpsettings('verbose',1,'solver','quadprog');
             obj.yalmip_optimizer = optimizer(constraints,objective,opts,X0,{U{1} objective});
+            p =2;
         end
 
         function [u, u_info] = eval(obj,x)
