@@ -1,4 +1,6 @@
 % Tuning the lqr controller
+clear
+clc
 
 %Initialisations
 params = generate_params();

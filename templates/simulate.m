@@ -10,13 +10,15 @@ function [Xt,Ut,u_info] = simulate(x0, ctrl, params)
 
 % YOUR CODE HERE
 % Hint: you can access the control command with ctrl.eval(x(:,i))
+    % Parameter Initialisation
     A = params.model.A;
     B = params.model.B;
     Nt = params.model.HorizonLength;
     Xt = zeros(size(x0,1), Nt+1);
     Xt(:,1) = x0;
     Ut = zeros(size(ctrl.K,1),Nt);
-
+    
+    % Simulation Loop
     for k = 2:Nt+1
         dx = k-1;
         [Ut(:,k-1), u_info(dx)] = ctrl.eval(Xt(:,k-1));

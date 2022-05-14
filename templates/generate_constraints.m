@@ -8,6 +8,7 @@
 
 function [H_u, h_u, H_x, h_x] = generate_constraints(params)
     % YOUR CODE HERE
+    % Generation of polytopic constraints for state and input
     H_u = [1 0 0; -1 0 0; 0 1 0; 0 -1 0; 0 0 1; 0 0 -1];
     umax = params.constraints.MaxAbsThrust;
     h_u = [umax; umax; umax; umax; umax; umax];

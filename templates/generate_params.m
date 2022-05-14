@@ -41,6 +41,8 @@ params.exercise = struct( ...
 );
     
 % YOUR CODE HERE
+% Just implementing the taks/steps to acquire the final system and
+% constraints
 [Ac, Bc] = generate_system_cont(params);
 [At, Bt] = generate_system(Ac, Bc, params);
 [A,B] = generate_system_scaled(At,Bt,params);

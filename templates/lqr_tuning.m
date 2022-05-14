@@ -8,14 +8,16 @@
 
 function [tuning_struct, i_opt] = lqr_tuning(x0,Q,params)
     % YOUR CODE HERE
-%     stoppp = 1;
-
+    % Loop over different Qs for different LQR controllers
     for i = 1:size(Q,2)
+        % Calculating LQR controller, simulating the resulting trajectory
+        % and obtaining the trajectory constraints
         R = eye(3); %% TODO Hardcoded - PROBLEMATIC
         obj = LQR(diag(Q(:,i)),R,params);
         [x,u,~] = simulate(x0, obj, params);
         [s_max, y_max, u_max, J_u, df_max, vf_max, traj_feas] = traj_constraints(x,u,params);
 
+        % Constructing the struct required for the lqr tuning
         tuning_struct(i,:) = struct(...
         'InitialCondition', x0, ...
         'Qdiag', Q(:,i), ...
@@ -27,7 +29,8 @@ function [tuning_struct, i_opt] = lqr_tuning(x0,Q,params)
         'MaxFinalVelDiff', vf_max, ... 
         'TrajFeasible', traj_feas ...
     );
-
+         % Check the feasibility of the trajectory and find the the best
+         % lqr controller
         i_opt = nan;
         if isnan(i_opt) & (tuning_struct(i).TrajFeasible == true) 
             i_opt = i;
@@ -35,6 +38,4 @@ function [tuning_struct, i_opt] = lqr_tuning(x0,Q,params)
             i_opt = i;
         end
     end
-
-    stopp2 = 1;
-    end
+  end

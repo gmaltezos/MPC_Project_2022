@@ -14,6 +14,7 @@ classdef MPC_TS_SC
     methods
         function obj = MPC_TS_SC(Q,R,N,H,h,S,v,params)            
             % YOUR CODE HERE
+            % Parameter Initialisation
             A = params.model.A;
             B = params.model.B;
 
@@ -30,7 +31,8 @@ classdef MPC_TS_SC
             X0 = sdpvar(nx,1,'full');
             X = sdpvar(repmat(nx,1,N+1),ones(1,N+1),'full');
             e = sdpvar(repmat(size(h_x,1),1,N+1),ones(1,N+1),'full');
-
+            
+            % Define objective and constraints
             objective = 0;
             constraints = X{1} == X0;
             for k = 1:N
@@ -55,8 +57,7 @@ classdef MPC_TS_SC
             J_Nt = X{N+1}' * P * X{N+1};
             objective = objective + J_Nt + e{N+1}'*S*e{N+1} + v*max(abs(e{N+1}));
 
-
-
+            % Define the optimizer
             opts = sdpsettings('verbose',1,'solver','quadprog');
             obj.yalmip_optimizer = optimizer(constraints,objective,opts,X0,{U{1} objective});
             p =2;

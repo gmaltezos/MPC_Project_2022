@@ -14,6 +14,7 @@ classdef MPC_TS
     methods
         function obj = MPC_TS(Q,R,N,H,h,params)
             % YOUR CODE HERE
+            % Parameter initialisation 
             A = params.model.A;
             B = params.model.B;
 
@@ -42,7 +43,7 @@ classdef MPC_TS
 
                 objective = objective + X{k}'*Q*X{k} + U{k}'*R*U{k};
             end
-            % terminal constraint
+            % Terminal constraint
             constraints = [ ...
                 constraints, ...
                 H * X{N+1} <= h
@@ -52,7 +53,8 @@ classdef MPC_TS
             [~,P,~] = dlqr(A, B, Q, R);
             J_Nt = X{N+1}' * P * X{N+1};
             objective = objective + J_Nt;
-
+            
+            % Define the optimizer
             opts = sdpsettings('verbose',1,'solver','quadprog');
             obj.yalmip_optimizer = optimizer(constraints,objective,opts,X0,{U{1} objective});
         end

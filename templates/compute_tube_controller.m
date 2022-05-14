@@ -6,9 +6,11 @@
 % Please see the LICENSE file that has been included as part of this package.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function K_tube = compute_tube_controller(p,params_z)
+function K_tube = compute_tube_controller(p,params)
 	% YOUR CODE HERE
-    A = params_z.model.A;
-    B = params_z.model.B;
+    % Calculating Controller Gain for specific pole placement
+%     params_z = generate_params_z(params);
+    A = params.model.A;
+    B = params.model.B;
     K_tube = place(A,-B,p); % WHY DOES THIS NEED A MINUS
 end

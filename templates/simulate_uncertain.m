@@ -6,15 +6,17 @@
 % Please see the LICENSE file that has been included as part of this package.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [Xt,Ut,u_info] = simulate_uncertain(x0, ctrl, Wt, params_z)
+function [Xt,Ut,u_info] = simulate_uncertain(x0, ctrl, Wt, params)
 	% YOUR CODE HERE
-    A = params_z.model.A;
-    B = params_z.model.B;
-    Nt = params_z.model.HorizonLength;
+    % Parameter initialisation
+    A = params.model.A;
+    B = params.model.B;
+    Nt = params.model.HorizonLength;
     Xt = zeros(size(x0,1), Nt+1);
     Xt(:,1) = x0;
     Ut = zeros(size(ctrl.K,1),Nt);
-
+    
+    % Simulation Loop
     for k = 2:Nt+1
         dx = k-1;
         [Ut(:,k-1), u_info(dx)] = ctrl.eval(Xt(:,k-1));

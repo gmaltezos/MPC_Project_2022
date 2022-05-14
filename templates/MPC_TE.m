@@ -14,6 +14,7 @@ classdef MPC_TE
     methods
         function obj = MPC_TE(Q,R,N,params)
             % YOUR CODE HERE
+            % Parameter initialisation
             A = params.model.A;
             B = params.model.B;
 
@@ -30,6 +31,7 @@ classdef MPC_TE
             X0 = sdpvar(nx,1,'full');
             X = sdpvar(repmat(nx,1,N+1),ones(1,N+1),'full');
 
+            % Define objective and constraints
             objective = 0;
             constraints = X{1} == X0;
             for k = 1:N
@@ -42,12 +44,14 @@ classdef MPC_TE
 
                 objective = objective + X{k}'*Q*X{k} + U{k}'*R*U{k};
             end
+
             % terminal constraint
             constraints = [ ...
                 constraints, ...
                 X{N+1} == zeros(nx,1)
             ];
-
+            
+            % Define optimizer
             opts = sdpsettings('verbose',1,'solver','quadprog');
             obj.yalmip_optimizer = optimizer(constraints,objective,opts,X0,{U{1} objective});
         end

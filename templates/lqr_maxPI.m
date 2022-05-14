@@ -16,12 +16,15 @@
 
 function [H, h] = lqr_maxPI(Q,R,params)
 	% YOUR CODE HERE
+    % Parameter initialisation
     A = params.model.A;
     B = params.model.B;
+
+    % Gain of LQR controller
     [F,~,~] = dlqr(A, B, Q, R);
     K = F;
 
-    % computes a control invariant set for LTI system x^+ = A*x+B*u
+    % Resulting LTI system with the lqr controller
     system = LTISystem('A', A - B*K);
     
     % The constraints should not be hardcoded, because in every test
@@ -37,12 +40,16 @@ function [H, h] = lqr_maxPI(Q,R,params)
     uMin = [];
     uMax = [];
     for i =1:2:size(h_x,1)
-        xMin = [xMin; -h_x(i+1)];
-        xMax = [xMax; h_x(i)];
+        if any(H_x(i,:),[2])
+            xMin = [xMin; -h_x(i+1)];
+            xMax = [xMax; h_x(i)];
+        end
     end
     for j=1:2:size(h_u,1)
-        uMin = [uMin; -h_u(j+1)];
-        uMax = [uMax; h_u(j)];
+        if any(H_u(j,:),[2])
+            uMin = [uMin; -h_u(j+1)];
+            uMax = [uMax; h_u(j)];
+        end
     end
     system.x.min = [xMin; zeros(nx-size(xMin,1),1)];
     system.x.max = [xMax; zeros(nx-size(xMax,1),1)];
@@ -53,8 +60,13 @@ function [H, h] = lqr_maxPI(Q,R,params)
     %P1 = Polyhedron('lb', uMin, 'ub', uMax);
     % TODO: Shouldn't the terminal set be part of the construction of the
     % invariant set too?
-    A = [-K; K];
+
     b = [uMax; uMax];
+    A = [];
+    while size(A,1) ~= size(b,1)
+        A = [A; -K; K];
+    end
+%     A = [-K; K];
     P = Polyhedron (A, b);
     system.setDomain('x', P);
     %%controller.model.x.with(’setConstraint’)
@@ -63,6 +75,5 @@ function [H, h] = lqr_maxPI(Q,R,params)
 %     InvSet.plot()
     H = InvSet.A;
     h = InvSet.b;
-%     stopp3 = 1;
 end
 

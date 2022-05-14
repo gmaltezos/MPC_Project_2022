@@ -15,6 +15,7 @@ classdef LQR
         %constructor
         function obj = LQR(Q,R,params)
             % YOUR CODE HERE
+            % Solving RICATTI equation
             [F,~,~] = dlqr(params.model.A, params.model.B,Q,R);
             obj.K = F; %(save feedback matrix for use in eval function)
         end

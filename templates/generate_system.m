@@ -11,7 +11,8 @@ function [A, B] = generate_system(Ac, Bc, params)
     C = [0 0 0 0 0 0];
     D = [0 0 0];
     Ts = 600;
-
+    
+    % System generation
     sysc = ss(Ac,Bc,C,D);
     sysd = c2d(sysc,Ts);
     A = sysd.A;
