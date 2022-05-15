@@ -17,6 +17,9 @@ classdef LQR
             % YOUR CODE HERE
             % Solving RICATTI equation
             [F,~,~] = dlqr(params.model.A, params.model.B,Q,R);
+%               [~,~,F] = dare(params.model.A,params.model.B,Q,R); 
+%               [~,F,~] = idare(params.model.A,params.model.B,Q,R);
+
             obj.K = F; %(save feedback matrix for use in eval function)
         end
         % TODO Should it be called ctrl_info?

@@ -73,6 +73,11 @@ function [H, h] = lqr_maxPI(Q,R,params)
     %controller.model.x.setConstraint = X
     InvSet = system.invariantSet();
 %     InvSet.plot()
+
+%     Xp = Polyhedron('A',[eye(size(xMin,1)); -eye(size(xMax,1)); A], 'b', [xMax; xMax; uMax; uMax]);
+%     system.x.with('setConstraint');
+%     system.x.setConstraint = Xp;
+%     InvSet = system.invariantSet();
     H = InvSet.A;
     h = InvSet.b;
 end

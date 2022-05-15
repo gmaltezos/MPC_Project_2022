@@ -9,6 +9,7 @@
 function [tuning_struct, i_opt] = lqr_tuning(x0,Q,params)
     % YOUR CODE HERE
     % Loop over different Qs for different LQR controllers
+    i_opt = nan;
     for i = 1:size(Q,2)
         % Calculating LQR controller, simulating the resulting trajectory
         % and obtaining the trajectory constraints
@@ -31,7 +32,6 @@ function [tuning_struct, i_opt] = lqr_tuning(x0,Q,params)
     );
          % Check the feasibility of the trajectory and find the the best
          % lqr controller
-        i_opt = nan;
         if isnan(i_opt) & (tuning_struct(i).TrajFeasible == true) 
             i_opt = i;
         elseif ~isnan(i_opt) & (tuning_struct(i).TrajFeasible) == true & (tuning_struct(i).InputCost < tuning_struct(i_opt).InputCost)

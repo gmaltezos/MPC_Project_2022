@@ -44,7 +44,8 @@ classdef MPC_TS_SC
                     e{k} >= zeros(size(h_x,1),1) ... 
                 ];
 
-                objective = objective + X{k}'*Q*X{k} + U{k}'*R*U{k} + e{k}'*S*e{k} + v*max(abs(e{k})) ;
+                objective = objective + X{k}'*Q*X{k} + U{k}'*R*U{k} + e{k}'*S*e{k} + v*max(abs(e{k}));
+%                 objective = objective + X{k}'*Q*X{k} + U{k}'*R*U{k};
             end
             % terminal constraint
             constraints = [ ...
@@ -56,11 +57,11 @@ classdef MPC_TS_SC
             [~,P,~] = dlqr(A, B, Q, R);
             J_Nt = X{N+1}' * P * X{N+1};
             objective = objective + J_Nt + e{N+1}'*S*e{N+1} + v*max(abs(e{N+1}));
+%             objective = objective + J_Nt;
 
             % Define the optimizer
             opts = sdpsettings('verbose',1,'solver','quadprog');
             obj.yalmip_optimizer = optimizer(constraints,objective,opts,X0,{U{1} objective});
-            p =2;
         end
 
         function [u, u_info] = eval(obj,x)
