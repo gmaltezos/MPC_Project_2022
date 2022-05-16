@@ -12,5 +12,5 @@ function K_tube = compute_tube_controller(p,params)
 %     params_z = generate_params_z(params);
     A = params.model.A;
     B = params.model.B;
-    K_tube = place(A,-B,p); % WHY DOES THIS NEED A MINUS
+    K_tube = -place(A,B,p); % WHY DOES THIS NEED A MINUS
 end

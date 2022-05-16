@@ -51,8 +51,8 @@ function [H, h] = lqr_maxPI(Q,R,params)
             uMax = [uMax; h_u(j)];
         end
     end
-    system.x.min = [xMin; zeros(nx-size(xMin,1),1)];
-    system.x.max = [xMax; zeros(nx-size(xMax,1),1)];
+%     system.x.min = [xMin; zeros(nx-size(xMin,1),1)];
+%     system.x.max = [xMax; zeros(nx-size(xMax,1),1)];
     %system.u.min = uMin;
     %system.u.max = uMax;
     %controller.model.x.with(’terminalSet’)
@@ -67,17 +67,10 @@ function [H, h] = lqr_maxPI(Q,R,params)
         A = [A; -K; K];
     end
 %     A = [-K; K];
+    Xp = Polyhedron('A',[H_x; A], 'b', [h_x; uMax; uMax]);
     P = Polyhedron (A, b);
-    system.setDomain('x', P);
-    %%controller.model.x.with(’setConstraint’)
-    %controller.model.x.setConstraint = X
+    system.setDomain('x', Xp);
     InvSet = system.invariantSet();
-%     InvSet.plot()
-
-%     Xp = Polyhedron('A',[eye(size(xMin,1)); -eye(size(xMax,1)); A], 'b', [xMax; xMax; uMax; uMax]);
-%     system.x.with('setConstraint');
-%     system.x.setConstraint = Xp;
-%     InvSet = system.invariantSet();
     H = InvSet.A;
     h = InvSet.b;
 end
