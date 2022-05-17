@@ -10,6 +10,7 @@ function [tuning_struct, i_opt] = lqr_tuning(x0,Q,params)
     % YOUR CODE HERE
     % Loop over different Qs for different LQR controllers
     i_opt = nan;
+    % iterate through parameter vectors
     for i = 1:size(Q,2)
         % Calculating LQR controller, simulating the resulting trajectory
         % and obtaining the trajectory constraints
