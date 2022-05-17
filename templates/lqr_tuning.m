@@ -13,7 +13,7 @@ function [tuning_struct, i_opt] = lqr_tuning(x0,Q,params)
     for i = 1:size(Q,2)
         % Calculating LQR controller, simulating the resulting trajectory
         % and obtaining the trajectory constraints
-        R = eye(params.model.nu); %% TODO Hardcoded - PROBLEMATIC
+        R = eye(params.model.nu);
         obj = LQR(diag(Q(:,i)),R,params);
         [x,u,~] = simulate(x0, obj, params);
         [s_max, y_max, u_max, J_u, df_max, vf_max, traj_feas] = traj_constraints(x,u,params);

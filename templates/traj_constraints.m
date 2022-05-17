@@ -18,10 +18,12 @@ function [s_max, y_max, u_max, J_u, df_max, vf_max, traj_feas] = traj_constraint
     y_max = max(abs(x(2,:)));
     
     % Maximum absolute value of applied thrust
+    u_norm_traj = [];
     for i =1:size(u,2)
      u_norm = norm(u(:,i),"inf"); %% I am not sure for this calculation!!
+     u_norm_traj = [u_norm_traj, u_norm];
     end
-    u_max = max(u_norm);
+    u_max = max(u_norm_traj);
     
     % Closed loop finite horizon input cost
     J_u = 0;
