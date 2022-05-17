@@ -35,40 +35,7 @@ function [H, h] = lqr_maxPI(Q,R,params)
     h_u = params.constraints.InputRHS;
     H_x = params.constraints.StateMatrix;
     h_x = params.constraints.StateRHS;
-    xMin = [];
-    xMax = [];
-    uMin = [];
-    uMax = [];
-    for i =1:2:size(h_x,1)
-        if any(H_x(i,:),[2])
-            xMin = [xMin; -h_x(i+1)];
-            xMax = [xMax; h_x(i)];
-        end
-    end
-    for j=1:2:size(h_u,1)
-        if any(H_u(j,:),[2])
-            uMin = [uMin; -h_u(j+1)];
-            uMax = [uMax; h_u(j)];
-        end
-    end
-%     system.x.min = [xMin; zeros(nx-size(xMin,1),1)];
-%     system.x.max = [xMax; zeros(nx-size(xMax,1),1)];
-    %system.u.min = uMin;
-    %system.u.max = uMax;
-    %controller.model.x.with(’terminalSet’)
-    %controller.model.x.terminalSet = T
-    %P1 = Polyhedron('lb', uMin, 'ub', uMax);
-    % TODO: Shouldn't the terminal set be part of the construction of the
-    % invariant set too?
-
-    b = [uMax; uMax];
-    A = [];
-    while size(A,1) ~= size(b,1)
-        A = [A; -K; K];
-    end
-%     A = [-K; K];
-    Xp = Polyhedron('A',[H_x; A], 'b', [h_x; uMax; uMax]);
-    P = Polyhedron (A, b);
+    Xp = Polyhedron('A',[H_x; - H_u * K], 'b', [h_x; h_u]);
     system.setDomain('x', Xp);
     InvSet = system.invariantSet();
     H = InvSet.A;
