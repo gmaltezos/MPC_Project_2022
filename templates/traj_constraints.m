@@ -25,6 +25,9 @@ function [s_max, y_max, u_max, J_u, df_max, vf_max, traj_feas] = traj_constraint
     end
     u_max = max(u_norm_traj);
     
+    %Alternative approach:  u_max = max(abs(u),[],'all'); finds max absolute thrust across three dims and time 
+
+    
     % Closed loop finite horizon input cost
     J_u = 0;
     for k = 1:size(u,2)
