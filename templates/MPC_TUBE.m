@@ -29,8 +29,6 @@ classdef MPC_TUBE
             H_u = params.constraints.InputMatrix;
             h_u = params.constraints.InputRHS;
 
-            Ak = A+B*K_tube;
-
             % define optimization variables
             V = sdpvar(repmat(nu,1,N),ones(1,N),'full');
             X0 = sdpvar(nx,1,'full');

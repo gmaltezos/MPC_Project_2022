@@ -2,23 +2,23 @@
 clear
 clc
 
-v = 1000;
+v = 10000;
 S = diag([100 100 100 100 100 100]);
 
 params = generate_params();
 % Q = diag(params.exercise.QdiagOptA);
 Q = diag([150; 150; 150; 10;0;0]);
-R = 3*eye(3);
+R = 3*eye(params.model.nu);
 N = 30;
 [H, h] = lqr_maxPI(Q,R,params);
 A = params.model.A;
 B = params.model.B;
 
-x = params.model.InitialConditionC;
+x = params.model.InitialConditionA;
 %params.constraints.StateMatrix=zeros(6,6);
 %params.constraints.StateRHS=zeros(6,1);
 obj1 = MPC_TS(Q,R,N,H,h,params);
-u1 = zeros(3, 20);
+u1 = zeros(params.model.nu, 20);
 for i = 1:20
     [u1(:,i), u_info1] = eval(obj1,x);
     x = A*x + B*u1(:,i);
@@ -28,8 +28,8 @@ for i = 1:20
     end
 end
 
-y = params.model.InitialConditionC;
-u2 = zeros(3, 20);
+y = params.model.InitialConditionA;
+u2 = zeros(params.model.nu, 20);
 obj2 = MPC_TS_SC(Q,R,N,H,h,S,v,params);
 for j=1:20
     [u2(:,j), u_info2] = eval(obj2,y);
@@ -40,6 +40,6 @@ for j=1:20
     end
 end
 
-inputsSameCheck = isequal(round(u1,12), round(u1,12))
+inputsSameCheck = isequal(round(u1,16), round(u1,16))
 filename = 'MPC_TS_SC_params';
 save(filename, "S", "v")

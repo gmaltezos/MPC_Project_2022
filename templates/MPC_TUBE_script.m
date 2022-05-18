@@ -22,7 +22,7 @@ params_z_tube = compute_tightening(K_tube,H_tube,h_tube,params_z);
 
 % Design the terminal set
 [H_N, h_N] = lqr_maxPI(Q,R,params_z_tube);
-
+obj = MPC_TUBE(Q,R,N,H_N,h_N,H_tube,h_tube,K_tube,params_z_tube);
 % Save the necessary variables
 filename = 'MPC_TUBE_params';
 save(filename, "p", "K_tube", "H_tube", "h_tube", "H_N", "h_N", "params_z_tube")
