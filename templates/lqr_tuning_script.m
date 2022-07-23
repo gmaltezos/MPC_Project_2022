@@ -1,7 +1,4 @@
 % Tuning the lqr controller
-% By first tuning in the z direction (first searching in the log-space and
-% then in the linear space) and then in the xy directions with the same
-% idea
 clear
 clc
 
@@ -10,7 +7,6 @@ params = generate_params();
 x0 = params.model.InitialConditionA;
 
 % % Tuning the dynamics in z direction
-% Searching in the log space
 % n = 100;
 % ay = 2;
 % by = 3;
@@ -18,8 +14,7 @@ x0 = params.model.InitialConditionA;
 % bz = 1;
 % y = logspace(ay,by,n);
 % z = logspace(az,bz,n);
-%
-% % Initialisation and loop to connstruct the Q matrix 
+% 
 % Q = [];
 % % Q = [91.5; 0.0924; 248;0;0;0];
 % for i=1:n
@@ -29,8 +24,7 @@ x0 = params.model.InitialConditionA;
 %     end
 % end
 
-% Searching in the linear subspace close to the values found from the
-% previous loop
+
 % n = 100;
 % ay = 200;
 % by = 300;
@@ -38,8 +32,7 @@ x0 = params.model.InitialConditionA;
 % bz = 10;
 % y = linspace(ay,by,n);
 % z = linspace(az,bz,n);
-%
-% % Initialisation and loop to connstruct the Q matrix 
+% 
 % Q = [];
 % % Q = [91.5; 0.0924; 248;0;0;0];
 % for i=1:n
@@ -51,7 +44,6 @@ x0 = params.model.InitialConditionA;
 
 
 % Tuning the dynamics in xy directions
-% Searching in the log space 
 tic
 n = 10;
 ay = -2;
@@ -68,7 +60,6 @@ z = logspace(az,bz,n);
 m = logspace(am,bm,n);
 o = logspace(ao,bo,n);
 
-% % Initialisation and loop to connstruct the Q matrix 
 Q=[];
 for i=1:n
     for j=1:n
@@ -82,8 +73,6 @@ for i=1:n
 end
 
 % Tuning the dynamics in xy directions
-% Searching in the linear subspace close to the values found from the
-% previous loop
 % tic
 % n = 10;
 % ay = 0.08;
@@ -100,7 +89,6 @@ end
 % m = linspace(am,bm,n);
 % o = linspace(ao,bo,n);
 % 
-% % Initialisation and loop to connstruct the Q matrix 
 % Q=[];
 % for i=1:n
 %     for j=1:n
